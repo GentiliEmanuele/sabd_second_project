@@ -1,17 +1,18 @@
 networks:
-  - cluster-network
+  cluster-network:
 
 services:
   micro-challenger:
     image: micro-challenger:latest
     hostname: micro-challenger
     networks:
-      - test_network
+      - cluster-network
     ports:
       - "8866:8866"
     volumes:
       - ./gc25/data:/data
     command: ["0.0.0.0:8866", "/data"]
+
   jobmanager:
     build: pyflink
     ports:
@@ -20,7 +21,9 @@ services:
     environment:
       - |
         FLINK_PROPERTIES=
-        jobmanager.rpc.address: jobmanager        
+        jobmanager.rpc.address: jobmanager    
+    networks:
+      - cluster-network    
 
   taskmanager:
     build: pyflink
@@ -32,4 +35,6 @@ services:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
-        taskmanager.numberOfTaskSlots: 2        
+        taskmanager.numberOfTaskSlots: 2
+    networks:
+      - cluster-network   

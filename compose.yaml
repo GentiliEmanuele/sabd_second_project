@@ -1,5 +1,6 @@
 networks:
   cluster-network:
+    driver: bridge
 
 services:
   micro-challenger:
@@ -10,7 +11,7 @@ services:
     ports:
       - "8866:8866"
     volumes:
-      - ./gc25/data:/data
+      - ./gc25-chall/data:/data
     command: ["0.0.0.0:8866", "/data"]
 
   jobmanager:
@@ -18,12 +19,14 @@ services:
     ports:
       - "8081:8081"
     command: jobmanager
+    networks:
+      - cluster-network
     environment:
       - |
         FLINK_PROPERTIES=
-        jobmanager.rpc.address: jobmanager    
-    networks:
-      - cluster-network    
+        jobmanager.rpc.address: jobmanager
+    volumes:
+      - ./app:/opt/flink/usrlib
 
   taskmanager:
     build: pyflink
@@ -31,10 +34,12 @@ services:
       - jobmanager
     command: taskmanager
     scale: 1
+    networks:
+      - cluster-network
     environment:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
         taskmanager.numberOfTaskSlots: 2
-    networks:
-      - cluster-network   
+    volumes:
+      - ./app:/opt/flink/usrlib 

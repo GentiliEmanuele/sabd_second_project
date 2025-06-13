@@ -1,0 +1,1 @@
+docker exec jobmanager flink run -c it.sabd2425.Main /opt/flink/usrlib/progetto2-1.0-SNAPSHOT.jar

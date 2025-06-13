@@ -15,31 +15,30 @@ services:
     command: ["0.0.0.0:8866", "/data"]
 
   jobmanager:
-    build: pyflink
+    image: flink:latest
+    hostname: jobmanager
     ports:
       - "8081:8081"
     command: jobmanager
-    networks:
-      - cluster-network
+    volumes:
+      - ./target:/opt/flink/usrlib
     environment:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
-    volumes:
-      - ./app:/opt/flink/usrlib
+        parallelism.default: 2        
 
   taskmanager:
-    build: pyflink
+    image: flink:latest
     depends_on:
       - jobmanager
     command: taskmanager
     scale: 1
-    networks:
-      - cluster-network
+    volumes:
+      - ./target:/opt/flink/usrlib
     environment:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
         taskmanager.numberOfTaskSlots: 2
-    volumes:
-      - ./app:/opt/flink/usrlib 
+        parallelism.default: 2        

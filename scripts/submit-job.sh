@@ -1,1 +1,1 @@
-docker exec jobmanager flink run -c it.sabd2425.Main /opt/flink/usrlib/progetto2-1.0-SNAPSHOT.jar
+docker exec jobmanager flink run -c it.sabd2425.DataStreamJob /opt/flink/usrlib/progetto2-1.0-SNAPSHOT.jar

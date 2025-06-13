@@ -17,6 +17,7 @@ services:
   jobmanager:
     image: flink:latest
     hostname: jobmanager
+    container_name: jobmanager
     ports:
       - "8081:8081"
     command: jobmanager
@@ -26,10 +27,13 @@ services:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
-        parallelism.default: 2        
+        parallelism.default: 2
+    networks:
+      - cluster-network
 
   taskmanager:
     image: flink:latest
+    container_name: taskmanager
     depends_on:
       - jobmanager
     command: taskmanager
@@ -41,4 +45,6 @@ services:
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
         taskmanager.numberOfTaskSlots: 2
-        parallelism.default: 2        
+        parallelism.default: 2
+    networks:
+      - cluster-network     

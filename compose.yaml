@@ -8,8 +8,6 @@ services:
     hostname: micro-challenger
     networks:
       - cluster-network
-    ports:
-      - "8866:8866"
     volumes:
       - ./gc25-chall/data:/data
     command: ["0.0.0.0:8866", "/data"]

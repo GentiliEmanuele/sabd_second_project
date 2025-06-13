@@ -11,7 +11,7 @@ services:
     volumes:
       - ./gc25-chall/data:/data
     command: ["0.0.0.0:8866", "/data"]
-
+  
   jobmanager:
     image: flink:latest
     hostname: jobmanager
@@ -45,4 +45,11 @@ services:
         taskmanager.numberOfTaskSlots: 2
         parallelism.default: 2
     networks:
-      - cluster-network     
+      - cluster-network  
+
+  firefox:
+    image: jlesage/firefox
+    ports:
+      - 5800:5800
+    networks:
+      - cluster-network

@@ -21,6 +21,8 @@ services:
     command: jobmanager
     volumes:
       - ./target:/opt/flink/usrlib
+    env_file:
+      - conf/flink.config
     environment:
       - |
         FLINK_PROPERTIES=

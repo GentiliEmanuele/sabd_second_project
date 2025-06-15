@@ -1,5 +1,5 @@
-mkdir -p target
-git clone git@github.com:francescodonnini/progetto2.git
-mvn clean install -f progetto2
-cp progetto2/target/progetto2-1.0-SNAPSHOT.jar target
-rm -rf ./progetto2
+mkdir -p $3/target
+git clone $1 $2
+mvn clean install -f $2/pom.xml
+cp $2/target/*-with-dependencies.jar $3/target/app.jar
+rm -rf $2

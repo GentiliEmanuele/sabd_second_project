@@ -67,6 +67,19 @@ services:
     networks:
       - cluster-network
 
+  kafka-producer:
+    build:
+      context: ./kafka-producer
+      dockerfile: Dockerfile
+    depends_on:
+      - kafka
+      - micro-challenger
+    command: ["--apitoken", "sandro", "--name", "autoban", "--limit", "128"]
+    env_file:
+      - conf/kafka.client.config
+    networks:
+      - cluster-network
+
   firefox:
     image: jlesage/firefox
     ports:

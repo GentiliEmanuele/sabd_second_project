@@ -47,40 +47,10 @@ services:
         taskmanager.numberOfTaskSlots: 2
         parallelism.default: 2
         taskmanager.memory.process.size: 4g
-      - FLINK_TM_HEAP=2048m
 
     networks:
       - cluster-network
   
-  kafka:
-    image: 'bitnami/kafka:latest'
-    hostname: kafka
-    env_file:
-      - conf/kafka.config
-    networks:
-      - cluster-network
-  
-  kafka-ui:
-    image: 'provectuslabs/kafka-ui:latest'
-    hostname: kafka-ui
-    depends_on:
-      - kafka
-    env_file:
-      - conf/kafka.ui.config
-    networks:
-      - cluster-network
-
-  kafka-producer:
-    image: franc/kp
-    depends_on:
-      - kafka
-      - micro-challenger
-    command: ["--apitoken", "sandro", "--name", "autoban"]
-    env_file:
-      - conf/kafka.client.config
-    networks:
-      - cluster-network
-
   firefox:
     image: jlesage/firefox
     ports:

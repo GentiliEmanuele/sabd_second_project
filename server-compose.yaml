@@ -1,0 +1,15 @@
+networks:
+  cluster-network:
+    driver: bridge
+
+services:
+  micro-challenger:
+    image: micro-challenger:latest
+    hostname: micro-challenger
+    ports:
+      - "8866:8866"
+    networks:
+      - cluster-network
+    volumes:
+      - ./gc25-chall/data:/data
+    command: ["0.0.0.0:8866", "/data"]

@@ -11,7 +11,7 @@ services:
     volumes:
       - ./gc25-chall/data:/data
     command: ["0.0.0.0:8866", "/data"]
-  
+
   jobmanager:
     image: flink:latest
     hostname: jobmanager
@@ -21,6 +21,7 @@ services:
     command: jobmanager
     volumes:
       - ./target:/opt/flink/usrlib
+      - ./jar/flink-hadoop-fs-2.0.0.jar:/opt/flink/plugins/hdfs/flink-hadoop-fs-2.0.0.jar
     env_file:
       - conf/flink.config
     environment:
@@ -28,6 +29,7 @@ services:
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
         parallelism.default: 2
+      - USE_EVENT_TIME=true
     networks:
       - cluster-network
 
@@ -40,6 +42,7 @@ services:
     scale: 1
     volumes:
       - ./target:/opt/flink/usrlib
+      - ./jar/flink-hadoop-fs-2.0.0.jar:/opt/flink/plugins/hdfs/flink-hadoop-fs-2.0.0.jar
     environment:
       - |
         FLINK_PROPERTIES=
@@ -47,13 +50,72 @@ services:
         taskmanager.numberOfTaskSlots: 2
         parallelism.default: 2
         taskmanager.memory.process.size: 4g
+      - USE_EVENT_TIME=true
 
     networks:
       - cluster-network
-  
+
   firefox:
     image: jlesage/firefox
     ports:
       - 5800:5800
     networks:
       - cluster-network
+
+  namenode:
+    build: https://github.com/GentiliEmanuele/docker-hadoop.git
+    container_name: namenode
+    hostname: namenode
+    user: root
+    ports:
+      - "9870:9870"
+      - "54310:54310"
+    volumes:
+      - ./hdfs_starter/start-master.sh:/opt/scripts/start-master.sh
+    entrypoint: /bin/sh
+    command: ["/opt/scripts/start-master.sh"]
+    networks:
+      - cluster-network
+    tty: true
+
+  slave1:
+    build: https://github.com/GentiliEmanuele/docker-hadoop.git
+    container_name: slave1
+    hostname: slave1
+    ports:
+      - "9864:9864"
+    volumes:
+      - ./hdfs_starter/start-worker.sh:/opt/scripts/start-worker.sh
+    entrypoint: /bin/sh
+    command: ["/opt/scripts/start-worker.sh"]
+    networks:
+      - cluster-network
+    tty: true
+
+  slave2:
+    build: https://github.com/GentiliEmanuele/docker-hadoop.git
+    container_name: slave2
+    hostname: slave2
+    ports:
+      - "9865:9864"
+    volumes:
+      - ./hdfs_starter/start-worker.sh:/opt/scripts/start-worker.sh
+    entrypoint: /bin/sh
+    command: ["/opt/scripts/start-worker.sh"]
+    networks:
+      - cluster-network
+    tty: true
+
+  slave3:
+    build: https://github.com/GentiliEmanuele/docker-hadoop.git
+    container_name: slave3
+    hostname: slave3
+    ports:
+      - "9866:9864"
+    volumes:
+      - ./hdfs_starter/start-worker.sh:/opt/scripts/start-worker.sh
+    entrypoint: /bin/sh
+    command: ["/opt/scripts/start-worker.sh"]
+    networks:
+      - cluster-network
+    tty: true

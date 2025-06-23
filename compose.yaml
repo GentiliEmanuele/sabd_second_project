@@ -11,9 +11,9 @@ services:
     volumes:
       - ./gc25-chall/data:/data
     command: ["0.0.0.0:8866", "/data"]
-  
+
   jobmanager:
-    image: flink:latest
+    image: apache/flink:latest
     hostname: jobmanager
     container_name: jobmanager
     ports:
@@ -32,14 +32,15 @@ services:
       - cluster-network
 
   taskmanager:
-    image: flink:latest
+    image: apache/flink:latest
     container_name: taskmanager
     depends_on:
       - jobmanager
     command: taskmanager
-    scale: 1
     volumes:
       - ./target:/opt/flink/usrlib
+    env_file:
+      - conf/flink.config
     environment:
       - |
         FLINK_PROPERTIES=
@@ -47,37 +48,6 @@ services:
         taskmanager.numberOfTaskSlots: 2
         parallelism.default: 2
         taskmanager.memory.process.size: 4g
-      - FLINK_TM_HEAP=2048m
-
-    networks:
-      - cluster-network
-  
-  kafka:
-    image: 'bitnami/kafka:latest'
-    hostname: kafka
-    env_file:
-      - conf/kafka.config
-    networks:
-      - cluster-network
-  
-  kafka-ui:
-    image: 'provectuslabs/kafka-ui:latest'
-    hostname: kafka-ui
-    depends_on:
-      - kafka
-    env_file:
-      - conf/kafka.ui.config
-    networks:
-      - cluster-network
-
-  kafka-producer:
-    image: franc/kp
-    depends_on:
-      - kafka
-      - micro-challenger
-    command: ["--apitoken", "sandro", "--name", "autoban"]
-    env_file:
-      - conf/kafka.client.config
     networks:
       - cluster-network
 

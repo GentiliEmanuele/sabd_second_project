@@ -43,6 +43,37 @@ services:
     networks:
       - cluster-network
 
+  spark-master:
+    build:
+      context: ./spark
+      dockerfile: Dockerfile
+    container_name: spark-master
+    hostname: spark-master
+    ports:
+      - 8080:8080
+      - 7077:7077
+#    command: ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.master.Master"]
+    environment:
+      - SPARK_MODE=master
+    networks:
+      - cluster-network
+    tty: true
+
+  spark-worker:
+    image: spark:latest
+    hostname: spark-worker
+    command: ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.worker.Worker", "spark://spark-master:7077"]
+    deploy:
+      mode: replicated
+      replicas: 3
+    depends_on:
+      - spark-master
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER=spark://spark-master:7077
+    networks:
+      - cluster-network
+
   firefox:
     image: jlesage/firefox
     ports:

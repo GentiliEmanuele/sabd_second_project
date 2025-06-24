@@ -3,3 +3,6 @@ gc25-chall/data
 target/
 secrets/
 **/target
+*target/
+spark/build.sh
+kafka-producer/build.sh

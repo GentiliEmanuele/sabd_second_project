@@ -1,4 +1,5 @@
-FROM ubuntu:25.04
+FROM spark:latest
+
 USER root
 
 RUN apt-get update
@@ -18,12 +19,11 @@ ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 ENV PATH=$PATH:$JAVA_HOME/bin
 
 ENV PATH=$PATH:$JAVA_HOME/bin:/usr/local/bin:/usr/bin
-
 RUN mkdir -p /opt/app
-COPY kafka-target/app.jar /opt/app/app.jar
+COPY spark-target/spark-job.jar /opt/app/app.jar
 
 RUN mkdir -p /usr/local/scripts
 COPY entrypoint.sh /usr/local/scripts
 RUN chmod u+x /usr/local/scripts/entrypoint.sh
 
-ENTRYPOINT [ "/usr/local/scripts/entrypoint.sh" ]
+

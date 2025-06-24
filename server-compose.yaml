@@ -6,10 +6,46 @@ services:
   micro-challenger:
     image: micro-challenger:latest
     hostname: micro-challenger
-    ports:
-      - "8866:8866"
     networks:
       - cluster-network
     volumes:
       - ./gc25-chall/data:/data
     command: ["0.0.0.0:8866", "/data"]
+
+  kafka:
+    image: 'bitnami/kafka:latest'
+    hostname: kafka
+    env_file:
+      - conf/kafka.config
+    networks:
+      - cluster-network
+
+  kafka-producer:
+    build:
+      context: ./kafka-producer
+      dockerfile: Dockerfile
+    depends_on:
+      - kafka
+      - micro-challenger
+    command: ["--apitoken", "sandro", "--name", "autoban", "--limit", "128"]
+    env_file:
+      - conf/kafka.client.config
+    networks:
+      - cluster-network
+
+  kafka-ui:
+    image: 'provectuslabs/kafka-ui:latest'
+    hostname: kafka-ui
+    depends_on:
+      - kafka
+    env_file:
+      - conf/kafka.ui.config
+    networks:
+      - cluster-network
+
+  firefox:
+    image: jlesage/firefox
+    ports:
+      - 5800:5800
+    networks:
+      - cluster-network

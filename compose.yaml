@@ -29,7 +29,7 @@ services:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
-        parallelism.default: 2
+        parallelism.default: 1
     networks:
       - cluster-network
 
@@ -37,7 +37,6 @@ services:
     build:
       context: ./flink
       dockerfile: Dockerfile
-    container_name: taskmanager
     depends_on:
       - jobmanager
     cap_add:
@@ -51,9 +50,8 @@ services:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
-        taskmanager.numberOfTaskSlots: 2
-        parallelism.default: 2
-        taskmanager.memory.process.size: 4g
+        taskmanager.numberOfTaskSlots: 8
+        parallelism.default: 1
     networks:
       - cluster-network
 

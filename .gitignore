@@ -4,5 +4,5 @@ target/
 secrets/
 **/target
 *target/
-spark/build.sh
+scripts/build-spark.sh
 kafka-producer/build.sh

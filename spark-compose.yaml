@@ -44,15 +44,15 @@ services:
       - cluster-network
 
   spark-master:
-    build:
-      context: ./spark
-      dockerfile: Dockerfile
+    image: spark:latest
     container_name: spark-master
     hostname: spark-master
     ports:
       - 8080:8080
       - 7077:7077
-#    command: ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.master.Master"]
+    command: ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.master.Master"]
+    volumes:
+      - ./spark-target/spark-job.jar:/opt/app/app.jar
     environment:
       - SPARK_MODE=master
     networks:

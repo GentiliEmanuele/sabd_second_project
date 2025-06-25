@@ -13,11 +13,13 @@ services:
     command: ["0.0.0.0:8866", "/data"]
 
   jobmanager:
-    image: apache/flink:latest
+    build:
+      context: ./flink
+      dockerfile: Dockerfile
     hostname: jobmanager
     container_name: jobmanager
-    ports:
-      - "8081:8081"
+    cap_add:
+    - NET_ADMIN
     command: jobmanager
     volumes:
       - ./target:/opt/flink/usrlib
@@ -32,10 +34,14 @@ services:
       - cluster-network
 
   taskmanager:
-    image: apache/flink:latest
+    build:
+      context: ./flink
+      dockerfile: Dockerfile
     container_name: taskmanager
     depends_on:
       - jobmanager
+    cap_add:
+    - NET_ADMIN
     command: taskmanager
     volumes:
       - ./target:/opt/flink/usrlib

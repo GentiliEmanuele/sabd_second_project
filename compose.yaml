@@ -50,7 +50,7 @@ services:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
-        taskmanager.numberOfTaskSlots: 8
+        taskmanager.numberOfTaskSlots: 16
         parallelism.default: 1
     networks:
       - cluster-network

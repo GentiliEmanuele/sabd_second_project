@@ -6,3 +6,4 @@ secrets/
 *target/
 scripts/build-spark.sh
 kafka-producer/build.sh
+results/

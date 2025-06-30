@@ -44,6 +44,7 @@ services:
     command: taskmanager
     volumes:
       - ./target:/opt/flink/usrlib
+      - ./results:/opt/results
     env_file:
       - conf/flink.config
     environment:

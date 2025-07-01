@@ -11,8 +11,9 @@ headers=(
   ["ranking"]="print_id,batch_id,tile_id,saturated,outliers"
   ["centroids"]="print_id,batch_id,tile_id,saturated,centroids"
   ["saturated"]="print_id,batch_id,tile_id,saturated"
+  ["outliers"]="print_id,batch_id,tile_id,saturated,outliers"
 )
-folders=("ranking" "centroids" "saturated")
+folders=("ranking" "centroids" "saturated" "outliers")
 
 for folder in "${folders[@]}"; do
     subdir=$(find "$result_folder/$folder" -maxdepth 2 -type d -name "20*" | head -n 1)

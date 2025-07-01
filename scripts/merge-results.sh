@@ -8,7 +8,7 @@ parent="results"
 result_folder="$parent/$1"
 declare -A headers
 headers=( 
-  ["ranking"]="print_id,batch_id,tile_id,saturated,outliers"
+  ["ranking"]="print_id,batch_id,tile_id,saturated,p1,d1,p2,d2,p3,d3,p4,d4,p5,d5"
   ["centroids"]="print_id,batch_id,tile_id,saturated,centroids"
   ["saturated"]="print_id,batch_id,tile_id,saturated"
   ["outliers"]="print_id,batch_id,tile_id,saturated,outliers"

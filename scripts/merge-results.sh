@@ -17,19 +17,11 @@ folders=("ranking" "centroids" "saturated" "outliers")
 
 for folder in "${folders[@]}"; do
     subdir=$(find "$result_folder/$folder" -maxdepth 2 -type d -name "20*" | head -n 1)
-
-    # Define the output file
     output_file="$result_folder/$folder.csv"
-
     if [ -d "$subdir" ]; then
         echo "Processing $folder..."
-
-        # Write the header to the output file
         echo "${headers[$folder]}" > "$output_file"
-
-        # Append all part-* contents
         cat "$subdir"/part-* >> "$output_file"
-
         echo "Merged output with header saved to $output_file"
     else
         echo "No valid subdirectory found for $folder. Skipping."

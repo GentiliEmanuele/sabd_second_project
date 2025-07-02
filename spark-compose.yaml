@@ -57,6 +57,8 @@ services:
       - SPARK_MODE=master
     networks:
       - cluster-network
+    depends_on:
+      - kafka
     tty: true
 
   spark-worker:

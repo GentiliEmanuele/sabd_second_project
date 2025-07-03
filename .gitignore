@@ -7,3 +7,4 @@ secrets/
 scripts/build-spark.sh
 kafka-producer/build.sh
 results/
+spark-output/

@@ -47,9 +47,6 @@ services:
     image: spark:latest
     container_name: spark-master
     hostname: spark-master
-    ports:
-      - 8080:8080
-      - 7077:7077
     command: ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.master.Master"]
     volumes:
       - ./spark-target/spark-job.jar:/opt/app/app.jar
@@ -65,11 +62,10 @@ services:
     image: spark:latest
     hostname: spark-worker
     command: ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.worker.Worker", "spark://spark-master:7077"]
-    deploy:
-      mode: replicated
-      replicas: 3
     depends_on:
       - spark-master
+    volumes:
+      - ./spark-output:/tmp/output/
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER=spark://spark-master:7077

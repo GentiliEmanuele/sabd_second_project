@@ -27,7 +27,7 @@ services:
     depends_on:
       - kafka
       - micro-challenger
-    command: ["--apitoken", "sandro", "--name", "autoban", "--limit", "128"]
+    command: ["--apitoken", "sandro", "--name", "autoban", "--limit", "3600"]
     env_file:
       - conf/kafka.client.config
     networks:
@@ -52,6 +52,7 @@ services:
       - ./spark-target/spark-job.jar:/opt/app/app.jar
     environment:
       - SPARK_MODE=master
+      - DEBUG_ENABLED=true
     networks:
       - cluster-network
     depends_on:
@@ -69,6 +70,7 @@ services:
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER=spark://spark-master:7077
+      - DEBUG_ENABLED=true
     networks:
       - cluster-network
 

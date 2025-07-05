@@ -23,8 +23,10 @@ services:
     command: jobmanager
     volumes:
       - ./target:/opt/flink/usrlib
+      - ./results:/opt/results
     env_file:
       - conf/flink.config
+      - conf/flink.parallelism.config
     environment:
       - |
         FLINK_PROPERTIES=

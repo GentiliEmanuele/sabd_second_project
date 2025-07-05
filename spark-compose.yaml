@@ -50,9 +50,8 @@ services:
     command: ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.master.Master"]
     volumes:
       - ./spark-target/spark-job.jar:/opt/app/app.jar
-    environment:
-      - SPARK_MODE=master
-      - DEBUG_ENABLED=true
+    env_file:
+      - conf/spark.master.config
     networks:
       - cluster-network
     depends_on:
@@ -67,10 +66,8 @@ services:
       - spark-master
     volumes:
       - ./spark-output:/tmp/output/
-    environment:
-      - SPARK_MODE=worker
-      - SPARK_MASTER=spark://spark-master:7077
-      - DEBUG_ENABLED=true
+    env_file:
+      - conf/spark.worker.config
     networks:
       - cluster-network
 

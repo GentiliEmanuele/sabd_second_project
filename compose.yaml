@@ -23,7 +23,7 @@ services:
     command: jobmanager
     volumes:
       - ./target:/opt/flink/usrlib
-      - ./results:/opt/results
+      - ./results/flink:/opt/results
     env_file:
       - conf/flink.config
       - conf/flink.parallelism.config
@@ -46,7 +46,7 @@ services:
     command: taskmanager
     volumes:
       - ./target:/opt/flink/usrlib
-      - ./results:/opt/results
+      - ./results/flink:/opt/results
     env_file:
       - conf/flink.config
       - conf/flink.parallelism.config
@@ -54,7 +54,7 @@ services:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
-        taskmanager.numberOfTaskSlots: 16
+        taskmanager.numberOfTaskSlots: 32
         parallelism.default: 1
     networks:
       - cluster-network

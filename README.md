@@ -5,9 +5,10 @@ Internamente questo script:
 2. Utilizzando il comando `mvn clean install` genera i jar: `flink-job.jar` e `spark-job.jar`
 3. Questi due jar verranno copiati all'interno dei volumi utilizzati da Docker.
 
-Dunque eseguendo il comando `docker compose -f compose.yaml up -d` verrà lanciato il cluster Flink e il Challenger. A questo punto utilizzando lo script `scripts/submit-job.sh` verrà lanciato il job che esegue la pipeline utilizzando 
-Flink. 
+Per eseguire l'applicazione Flink:
+1. `docker compose -f compose.yaml up -d --scale taskmanager=<N>`
+2. `scripts/submit-job.sh --apitoken <token> --name <name> [--eventTime -g|--debug]`
+    - `--eventTime` lancia l'applicazione usando la finestra basata su tempo di evento.
+    - `-g`.`--debug` abilita controlli aggiunti per la diagnostica di errori, rallenta l'applicazione.
 
 Analogamente su Spark si lancia il comando `docker compose -f spark-compose.yaml up -d` per lanciare il cluster e con lo script `scripts/submit-spark-job.sh` viene sottomesso il job Spark. 
-
-
